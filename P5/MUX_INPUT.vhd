@@ -16,13 +16,13 @@ begin
     begin
         case prueba is
             when "000" =>
-                Q_SEL_buffer<=Entradas(0);
+                Q_SEL_buffer<=Entradas(0); -- 
             when "001" =>
-                Q_SEL_buffer<=Entradas(1);
+                Q_SEL_buffer<=Entradas(1); --
             when "010" =>
-                Q_SEL_buffer<=Entradas(2);
+                Q_SEL_buffer<=Entradas(2); --
             when "011" =>
-                Q_SEL_buffer<=Entradas(3);
+                Q_SEL_buffer<=Entradas(3); --
             when "100" => 
                 Q_SEL_buffer<='1';
             when others =>

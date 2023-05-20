@@ -4,7 +4,7 @@ use IEEE.numeric_std.all;
 
 entity SECUENCIADOR is
     generic(
-        D_WIDTH: integer := 8;
+        D_WIDTH: integer := 4;
         I_WIDTH: integer := 2        
     );
     port (
@@ -23,9 +23,8 @@ end entity SECUENCIADOR;
 
 architecture behavioral of SECUENCIADOR is
     signal selector: std_logic := '0';
-    signal reg_pc: std_logic_vector(D_WIDTH-1 downto 0);
-    signal Estado_presente: std_logic_vector(D_WIDTH-1 downto 0);
-    signal reg_incr: std_logic_vector(D_WIDTH-1 downto 0);
+    signal reg_pc: std_logic_vector(D_WIDTH-1 downto 0):=(others =>'0');
+    signal reg_incr: std_logic_vector(D_WIDTH-1 downto 0):=(others =>'0');
 begin
     LOGICA: process(CC, I)
     begin
@@ -71,27 +70,14 @@ begin
             VECT <= '1';
         end case;
     end process LOGICA;
-    MUX_REG_D: process(selector)
-    begin
-        if selector = '1' then
-            Estado_presente <= D;
-        else
-            Estado_presente <= reg_pc;
-        end if;
-    end process MUX_REG_D;
-    REG_PC_CONTROLLER: process(CLOCK)
+    
+    CAMBIO_DE_ESTADO: process(CLOCK)
     begin
         if rising_edge(CLOCK) then
-            reg_pc <= reg_incr;
+            reg_pc<= reg_incr;
+            reg_incr<= std_logic_vector( unsigned(reg_incr) + 1);
         end if;
-    end process REG_PC_CONTROLLER;
-
-    REG_INCR_CONTROLLER: process(Estado_presente)
-    begin
-        reg_incr    <= std_logic_vector( unsigned(Estado_presente) + 1);
-    end process REG_INCR_CONTROLLER;
-    
-
-    
+    end process CAMBIO_DE_ESTADO;
+    Y<= D when (selector = '1') else reg_pc;
     
 end architecture behavioral;
